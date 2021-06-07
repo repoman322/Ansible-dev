@@ -1,0 +1,50 @@
+---
+- name: Playbook - Install figlet
+  hosts: planetexpress
+  gather_facts: yes   # default is yes
+
+  tasks:
+  - name: using apt to remove figlet
+    apt:
+        name: figlet
+        state: present    # this will REMOVE the application
+    become: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: using apt to remove figlet
+    yum:
+        name: figlet
+        state: present    # this will REMOVE the application
+    become: yes
+    when:  ansible_distribution == "CentOS"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
