@@ -1,0 +1,37 @@
+---
+- name: Learning to send HTTPS messages with Ansible by exploring SpaceX website
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+          url: https://api.spacexdata.com/v3/launchpads #?limit=5&offset=4
+
+  tasks:
+          - name: Use GET to pull some data from SpaceX website
+            uri:
+                  url: "{{ url }}" # the URL to lookup
+                  method: GET      # ansible can send any HTTP method: GET, POST, PUT...
+            register: results        # this will be more than just the JSON stripped off the 200...
+                                   # results will ALSO include return values lie results.uri and restults.status
+                                   # however our main  instrest will be in results.content
+                                   #
+          - name: Display results on the screen
+            debug: 
+                var: results
+                verbosity: 2  # this requires the user to throw -v in order to make the playbook run this task
+
+          - name: Use Python method on a DICT to just return the KEYS within our data
+            debug:
+                    var: results.json[0].keys()   # we know this to be a list of dictionaries, therefor we can use list and DICT 
+                                        # method called ".keys()" or
+          
+          - name: Use the Jinja filter called "map" to just pluck a single key from every dictionary in our list results.json
+            debug:
+                    msg: "{{ results.json|map(attribute='name') }}"
+    
+          - name:  MAke our "results" more readable by writing them out to a file as YAML
+            copy:
+                    content: "{{ results.json|to_nice_yaml }}"
+                    dest: ~/ans/space-x-api-results.yml
+
