@@ -73,6 +73,6 @@
       msg: "{{ test_list | ansible.netcommon.ipaddr }}"
 
  # use Python method
-  - name: Trying Pythin Method
+  - name: Trying Python Method
     debug:
       var: test_list[0]
